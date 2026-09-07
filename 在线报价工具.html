@@ -1,0 +1,690 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>京品门窗 · 在线报价</title>
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+:root{
+  --red:#c0392b;--red2:#e31837;--red-bg:#fff5f5;--red-header:#c0392b;
+  --bg:#f0f0f3;--white:#fff;--border:#ddd;--border2:#e8e8ec;
+  --text:#1a1a1a;--muted:#666;--muted2:#999;
+  --r:8px;--r-sm:5px;
+}
+body{font-family:'PingFang SC','Microsoft YaHei',sans-serif;background:var(--bg);color:var(--text);font-size:13px;line-height:1.5}
+
+/* ===== HEADER ===== */
+.page-header{background:var(--red);color:#fff;padding:20px 24px 16px;display:flex;align-items:center;justify-content:space-between;gap:20px}
+.page-header h1{font-size:22px;font-weight:900;letter-spacing:-.3px;line-height:1.2}
+.page-header p{font-size:12px;opacity:.8;margin-top:3px}
+.header-actions{display:flex;gap:8px;flex-shrink:0}
+.btn{padding:7px 16px;border-radius:var(--r-sm);font-size:12px;font-weight:700;cursor:pointer;border:none;font-family:inherit;transition:all .15s}
+.btn-white{background:#fff;color:var(--red)}
+.btn-white:hover{background:#ffe5e5}
+.btn-outline{background:transparent;color:#fff;border:1.5px solid rgba(255,255,255,.5)}
+.btn-outline:hover{background:rgba(255,255,255,.12)}
+
+/* ===== LAYOUT ===== */
+.app{max-width:1300px;margin:0 auto;padding:16px 16px 60px}
+.two-col{display:flex;gap:16px;align-items:flex-start}
+.col-left{flex:1;min-width:0}
+.col-right{width:340px;flex-shrink:0;position:sticky;top:12px}
+
+/* ===== SECTION CARD ===== */
+.sec{background:var(--white);border-radius:var(--r);border:1px solid var(--border);margin-bottom:14px;overflow:hidden}
+.sec-head{background:var(--red);color:#fff;padding:8px 14px;font-size:13px;font-weight:800;display:flex;align-items:center;gap:6px}
+.sec-head .sec-num{width:20px;height:20px;border-radius:50%;background:rgba(255,255,255,.22);font-size:11px;font-weight:900;display:flex;align-items:center;justify-content:center;flex-shrink:0}
+.sec-body{padding:14px}
+
+/* ===== PROJECT INFO ===== */
+.info-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px 16px}
+.info-field{display:flex;align-items:center;gap:6px}
+.info-field label{font-size:12px;color:var(--muted);white-space:nowrap;min-width:68px}
+.info-field input{flex:1;border:none;border-bottom:1px solid var(--border);padding:4px 6px;font-size:13px;font-family:inherit;outline:none;background:transparent;color:var(--text)}
+.info-field input:focus{border-bottom-color:var(--red)}
+.info-field input::placeholder{color:var(--muted2)}
+
+/* ===== TABLE STYLES ===== */
+.quote-table{width:100%;border-collapse:collapse;font-size:12px}
+.quote-table th{background:#e8e8ec;color:#333;padding:6px 8px;text-align:center;font-weight:700;border:1px solid var(--border);white-space:nowrap}
+.quote-table td{padding:5px 7px;border:1px solid var(--border);vertical-align:middle;text-align:center}
+.quote-table td.left{text-align:left}
+.quote-table tr:nth-child(even) td{background:#fafafa}
+.quote-table td input{width:100%;border:none;background:transparent;font-size:12px;font-family:inherit;text-align:center;outline:none;padding:2px 0;color:var(--text)}
+.quote-table td input:focus{background:#fff8e1}
+.quote-table td input.left{text-align:left}
+.quote-table td.total-cell{font-weight:700;color:var(--red);font-size:13px}
+.subtotal-row td{background:#fff5f5 !important;font-weight:700;font-size:12px}
+.subtotal-row td.lbl{text-align:right;color:var(--muted);padding-right:12px}
+.subtotal-row td.amt{color:var(--red);font-weight:800;font-size:13px}
+
+/* ===== PRODUCT SELECTOR ===== */
+.prod-scroll{display:grid;grid-template-columns:repeat(auto-fill,minmax(145px,1fr));gap:8px}
+.prod-card{border:2px solid var(--border2);border-radius:var(--r-sm);padding:10px 10px 8px;cursor:pointer;transition:all .15s;text-align:center;position:relative}
+.prod-card:hover{border-color:#f28080}
+.prod-card.active{border-color:var(--red);background:var(--red-bg)}
+.prod-card .pt{display:inline-block;padding:1px 6px;border-radius:3px;font-size:10px;font-weight:800;margin-bottom:4px}
+.prod-card .pn{font-size:12px;font-weight:700;line-height:1.3;margin-bottom:2px}
+.prod-card .pd{font-size:10px;color:var(--muted);line-height:1.3;margin-bottom:3px}
+.prod-card .pp{font-size:11px;font-weight:700;color:var(--red)}
+.tag-red{background:var(--red);color:#fff}
+.tag-gray{background:#555;color:#fff}
+.tag-blue{background:#1a6ea8;color:#fff}
+.tag-green{background:#1a8040;color:#fff}
+.tag-amber{background:#b87a00;color:#fff}
+
+/* ===== SELECTED PRODUCT INFO (right panel) ===== */
+.spec-table{width:100%;border-collapse:collapse;font-size:12px}
+.spec-table tr{border-bottom:1px solid var(--border2)}
+.spec-table tr:last-child{border-bottom:none}
+.spec-table th{background:#f7f7f9;padding:6px 10px;color:var(--muted);font-weight:700;text-align:left;width:88px;white-space:nowrap;border-right:1px solid var(--border2)}
+.spec-table td{padding:6px 10px;font-size:12px;line-height:1.4}
+.spec-highlight{color:var(--red);font-weight:700;font-size:11px;text-align:center;padding:8px 0 2px}
+.warranty-note{background:#fff5f5;border:1px solid #f5b8b8;border-radius:var(--r-sm);padding:7px 10px;font-size:11px;color:var(--red);font-weight:700;margin-top:8px;text-align:center}
+
+/* ===== TOTAL SUMMARY (right panel) ===== */
+.total-panel{background:var(--white);border-radius:var(--r);border:1px solid var(--border);overflow:hidden}
+.total-head{background:var(--red);color:#fff;padding:10px 14px;font-size:14px;font-weight:800;text-align:center}
+.total-body{padding:12px 14px}
+.total-row{display:flex;justify-content:space-between;align-items:baseline;padding:5px 0;border-bottom:1px solid var(--border2)}
+.total-row:last-child{border-bottom:none}
+.total-row .tl{font-size:12px;color:var(--muted)}
+.total-row .tv{font-size:13px;font-weight:700}
+.total-big{background:#fff5f5;border-radius:var(--r-sm);padding:10px 14px;margin-top:8px;display:flex;justify-content:space-between;align-items:baseline}
+.total-big .tbl{font-size:14px;font-weight:700}
+.total-big .tbv{font-size:28px;font-weight:900;color:var(--red);letter-spacing:-.5px}
+.discount-row{display:flex;align-items:center;gap:8px;margin:8px 0 4px;flex-wrap:wrap}
+.discount-row label{font-size:12px;color:var(--muted);white-space:nowrap}
+.discount-row input[type=number]{width:64px;border:1px solid var(--border);border-radius:var(--r-sm);padding:4px 6px;font-size:12px;font-family:inherit;text-align:center;outline:none}
+.discount-row input:focus{border-color:var(--red)}
+.discount-hint{font-size:11px;color:var(--muted);flex-basis:100%}
+.small-order-note{background:#fff8e1;border:1px solid #f0c040;border-radius:var(--r-sm);padding:6px 10px;font-size:11px;color:#7a5a00;margin-top:6px}
+.btn-full{width:100%;margin-top:10px;padding:9px;font-size:13px;font-weight:800;border-radius:var(--r-sm);cursor:pointer;border:none;font-family:inherit;transition:all .15s}
+.btn-print{background:var(--red);color:#fff}
+.btn-print:hover{background:#a62620}
+.btn-reset{background:#f5f5f7;color:var(--muted);margin-top:6px;border:1px solid var(--border)}
+.btn-reset:hover{background:#e8e8ec}
+
+/* ===== ADD ROW BUTTON ===== */
+.add-row-btn{background:none;border:1.5px dashed var(--border);border-radius:var(--r-sm);width:100%;padding:7px;font-size:12px;color:var(--muted);cursor:pointer;transition:all .15s;font-family:inherit;margin-top:6px}
+.add-row-btn:hover{border-color:var(--red);color:var(--red);background:var(--red-bg)}
+.del-btn{background:none;border:none;color:var(--muted2);cursor:pointer;font-size:14px;padding:0 2px;line-height:1;transition:color .1s}
+.del-btn:hover{color:var(--red)}
+
+/* ===== ADDON TABS ===== */
+.tab-bar{display:flex;border-bottom:1px solid var(--border);margin-bottom:12px;flex-wrap:wrap}
+.tab{padding:7px 12px;font-size:12px;cursor:pointer;border-bottom:2px solid transparent;color:var(--muted);font-weight:600;transition:all .1s}
+.tab.active{color:var(--red);border-bottom-color:var(--red)}
+
+/* ===== PRINT ===== */
+@media print{
+  .page-header .header-actions,.btn-full,.btn-reset,.btn-print,.add-row-btn,.del-btn,.tab-bar{display:none!important}
+  .col-right{position:static}
+  .two-col{flex-direction:column}
+  .col-right{width:100%}
+  body{background:#fff}
+  .sec,.total-panel{border:1px solid #ccc;box-shadow:none}
+  @page{margin:1.5cm;size:A4 landscape}
+}
+
+@media(max-width:900px){
+  .two-col{flex-direction:column}
+  .col-right{width:100%;position:static}
+  .prod-scroll{grid-template-columns:repeat(3,1fr)}
+}
+@media(max-width:580px){
+  .prod-scroll{grid-template-columns:repeat(2,1fr)}
+  .info-grid{grid-template-columns:1fr}
+}
+.fade{animation:fi .2s ease}
+@keyframes fi{from{opacity:0;transform:translateY(3px)}to{opacity:1;transform:translateY(0)}}
+</style>
+</head>
+<body>
+
+<div class="page-header">
+  <div>
+    <h1>京品门窗 · 在线报价工具</h1>
+    <p>填写项目信息 → 选系列 → 配置明细 → 生成报价单</p>
+  </div>
+  <div class="header-actions">
+    <button class="btn btn-white" onclick="printQuote()">🖨 打印报价单</button>
+    <button class="btn btn-outline" onclick="resetAll()">重置</button>
+  </div>
+</div>
+
+<div class="app">
+<div class="two-col">
+
+<!-- ========== LEFT ========== -->
+<div class="col-left">
+
+  <!-- 1. PROJECT INFO -->
+  <div class="sec fade">
+    <div class="sec-head"><span class="sec-num">1</span> 项目信息</div>
+    <div class="sec-body">
+      <div class="info-grid">
+        <div class="info-field"><label>客户姓名：</label><input id="f_name" placeholder="请输入"></div>
+        <div class="info-field"><label>客户地址：</label><input id="f_addr" placeholder="请输入"></div>
+        <div class="info-field"><label>门窗设计师：</label><input id="f_designer" placeholder="请输入"></div>
+        <div class="info-field"><label>价格有效期：</label><input id="f_valid" placeholder="如：2025-12-31"></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 2. SELECT SERIES -->
+  <div class="sec fade">
+    <div class="sec-head"><span class="sec-num">2</span> 选择产品系列</div>
+    <div class="sec-body">
+      <div class="prod-scroll" id="seriesGrid"></div>
+    </div>
+  </div>
+
+  <!-- 3. BASIC QUOTE -->
+  <div class="sec fade">
+    <div class="sec-head"><span class="sec-num">3</span> 基础报价</div>
+    <div class="sec-body">
+      <table class="quote-table" id="basicTable">
+        <thead>
+          <tr>
+            <th style="width:32px">序号</th>
+            <th>系列/产品</th>
+            <th style="width:68px">总面积㎡</th>
+            <th style="width:64px">面积单价</th>
+            <th style="width:52px">开启扇数</th>
+            <th style="width:64px">开启单价</th>
+            <th style="width:52px">纱窗数量</th>
+            <th style="width:64px">纱窗单价</th>
+            <th style="width:80px">总价</th>
+            <th style="width:100px">备注</th>
+            <th style="width:28px"></th>
+          </tr>
+        </thead>
+        <tbody id="basicBody"></tbody>
+        <tfoot>
+          <tr class="subtotal-row">
+            <td colspan="8" class="lbl">基础项合计</td>
+            <td class="amt" id="basicTotal">0.00</td>
+            <td colspan="2"></td>
+          </tr>
+        </tfoot>
+      </table>
+      <button class="add-row-btn" onclick="addBasicRow()">＋ 添加一行</button>
+    </div>
+  </div>
+
+  <!-- 4. UPGRADES -->
+  <div class="sec fade">
+    <div class="sec-head"><span class="sec-num">4</span> 升级项报价</div>
+    <div class="sec-body">
+      <div class="tab-bar">
+        <div class="tab active" onclick="switchUpgTab('glass',this)">玻璃升级</div>
+        <div class="tab" onclick="switchUpgTab('hardware',this)">五金升级</div>
+        <div class="tab" onclick="switchUpgTab('joint',this)">拼接辅料</div>
+        <div class="tab" onclick="switchUpgTab('screen',this)">纱窗产品</div>
+        <div class="tab" onclick="switchUpgTab('custom',this)">自定义</div>
+      </div>
+      <div id="upgQuickPicker" style="margin-bottom:10px"></div>
+      <table class="quote-table" id="upgTable">
+        <thead>
+          <tr>
+            <th style="width:32px">序号</th>
+            <th style="width:68px">分类</th>
+            <th>升级项目</th>
+            <th style="width:64px">单价</th>
+            <th style="width:64px">数量/㎡</th>
+            <th style="width:80px">小计/元</th>
+            <th style="width:100px">备注</th>
+            <th style="width:28px"></th>
+          </tr>
+        </thead>
+        <tbody id="upgBody"></tbody>
+        <tfoot>
+          <tr class="subtotal-row">
+            <td colspan="5" class="lbl">升级项合计</td>
+            <td class="amt" id="upgTotal">0.00</td>
+            <td colspan="2"></td>
+          </tr>
+        </tfoot>
+      </table>
+      <button class="add-row-btn" onclick="addUpgRow()">＋ 添加升级项</button>
+    </div>
+  </div>
+
+  <!-- 5. SERVICE -->
+  <div class="sec fade">
+    <div class="sec-head"><span class="sec-num">5</span> 服务项报价 <span style="font-size:11px;font-weight:400;opacity:.8;margin-left:6px">（不参与活动折扣）</span></div>
+    <div class="sec-body">
+      <table class="quote-table" id="svcTable">
+        <thead>
+          <tr>
+            <th style="width:32px">序号</th>
+            <th style="width:68px">分类</th>
+            <th>服务项目</th>
+            <th style="width:64px">单价</th>
+            <th style="width:64px">数量</th>
+            <th style="width:80px">小计/元</th>
+            <th style="width:100px">备注</th>
+            <th style="width:28px"></th>
+          </tr>
+        </thead>
+        <tbody id="svcBody"></tbody>
+        <tfoot>
+          <tr class="subtotal-row">
+            <td colspan="5" class="lbl">服务项合计</td>
+            <td class="amt" id="svcTotal">0.00</td>
+            <td colspan="2"></td>
+          </tr>
+        </tfoot>
+      </table>
+      <button class="add-row-btn" onclick="addSvcRow()">＋ 添加服务项</button>
+      <div style="margin-top:8px">
+        <div style="font-size:11px;color:var(--muted);margin-bottom:4px">常用服务项快速添加：</div>
+        <div style="display:flex;flex-wrap:wrap;gap:6px">
+          <button class="add-row-btn" style="width:auto;padding:4px 10px;font-size:11px" onclick="addSvcPreset('室内护栏拆除',999)">＋ 室内护栏拆除 ¥999/㎡</button>
+          <button class="add-row-btn" style="width:auto;padding:4px 10px;font-size:11px" onclick="addSvcPreset('拆除室外防盗网',999)">＋ 拆除室外防盗网 ¥999/樘</button>
+          <button class="add-row-btn" style="width:auto;padding:4px 10px;font-size:11px" onclick="addSvcPreset('上楼人工费',999)">＋ 上楼人工费 ¥999/层</button>
+          <button class="add-row-btn" style="width:auto;padding:4px 10px;font-size:11px" onclick="addSvcPreset('远程运输费',999)">＋ 远程运输费 ¥999/次</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+<!-- ========== RIGHT ========== -->
+<div class="col-right">
+
+  <!-- Product Spec Card -->
+  <div class="sec" style="margin-bottom:14px" id="specCard">
+    <div class="sec-head">📋 产品配置清单</div>
+    <div class="sec-body" id="specBody">
+      <div style="text-align:center;padding:20px 0;color:var(--muted);font-size:12px">请先选择产品系列</div>
+    </div>
+  </div>
+
+  <!-- Total Summary -->
+  <div class="total-panel">
+    <div class="total-head">💰 总计报价</div>
+    <div class="total-body">
+      <div class="total-row"><span class="tl">基础项合计</span><span class="tv" id="s_basic">¥0.00</span></div>
+      <div class="total-row"><span class="tl">升级项合计</span><span class="tv" id="s_upg">¥0.00</span></div>
+      <div class="total-row"><span class="tl">服务项合计（不折）</span><span class="tv" id="s_svc">¥0.00</span></div>
+
+      <div style="margin-top:10px">
+        <div style="font-size:12px;font-weight:700;color:var(--muted);margin-bottom:4px">有效期内活动折扣</div>
+        <div class="discount-row">
+          <label>门窗折扣：</label>
+          <input type="number" id="discount" min="0.1" max="1" step="0.01" value="1" oninput="recalcAll()">
+          <span style="font-size:12px;color:var(--muted)">（1=无折扣，0.8=八折）</span>
+          <span class="discount-hint">仅适用于基础项+升级项，服务项不参与</span>
+        </div>
+      </div>
+
+      <div class="total-row" style="margin-top:4px"><span class="tl">门窗折后小计</span><span class="tv" id="s_discounted">¥0.00</span></div>
+
+      <div class="total-big">
+        <span class="tbl">总计</span>
+        <span class="tbv" id="s_grand">¥0.00</span>
+      </div>
+
+      <div class="small-order-note" id="smallOrderNote" style="display:none">
+        ⚠ 小单提示：门窗总面积不足8㎡ 或 交款不足1万元，需收取小单费 <b>¥999/户</b>
+      </div>
+    </div>
+    <div style="padding:0 14px 14px">
+      <button class="btn-full btn-print" onclick="printQuote()">🖨 打印 / 保存报价单</button>
+      <button class="btn-full btn-reset" onclick="resetAll()">重置全部</button>
+    </div>
+  </div>
+
+</div>
+
+</div>
+</div>
+
+<script>
+// ====================== PRODUCT DATA ======================
+const SERIES = [
+  {id:'D_SE',    name:'D1-SE 断桥铝',  tag:'入门款',tag2:'tag-gray',  desc:'70/80mm 双玻 内开内倒', glass:'xxx', hw:'xxx', wallthk:'xxx', heat:'xxx', color:'xxx', winP:999,  sashP:999,  screenP:999,  minArea:1.2, minSashArea:1.0, type:'inward'},
+  {id:'D_boom',  name:'D1-爆款 断桥铝',tag:'热销款',tag2:'tag-red',   desc:'三玻Low-e 内开内倒',    glass:'xxx', hw:'xxx', wallthk:'xxx', heat:'xxx', color:'xxx', winP:999,  sashP:999,  screenP:999,  minArea:1.2, minSashArea:1.0, type:'inward'},
+  {id:'D_75',    name:'D1-75 断桥铝',  tag:'升级款',tag2:'tag-blue',  desc:'75mm 双玻 内开内倒',    glass:'xxx', hw:'xxx', wallthk:'xxx', heat:'xxx', color:'xxx', winP:999,  sashP:999,  screenP:999,  minArea:1.2, minSashArea:1.0, type:'inward'},
+  {id:'D_Pro',   name:'D1-Pro 断桥铝', tag:'高性能',tag2:'tag-green', desc:'三玻夹胶 4SG Low-e',    glass:'xxx', hw:'xxx', wallthk:'xxx', heat:'xxx', color:'xxx', winP:999, sashP:999, screenP:999,  minArea:1.2, minSashArea:1.0, type:'inward'},
+  {id:'D_80',    name:'D1-80 断桥铝',  tag:'旗舰款',tag2:'tag-amber', desc:'80mm 45.3mm隔热条',     glass:'xxx', hw:'xxx', wallthk:'xxx', heat:'xxx', color:'xxx', winP:999, sashP:999, screenP:999,  minArea:1.2, minSashArea:1.0, type:'inward'},
+  {id:'D_Max',   name:'D1-Max 断桥铝', tag:'顶配',  tag2:'tag-red',   desc:'四玻夹胶 超白4SG',      glass:'xxx', hw:'xxx', wallthk:'xxx', heat:'xxx', color:'xxx', winP:999, sashP:999, screenP:999,  minArea:1.2, minSashArea:1.0, type:'inward'},
+  {id:'Y1',      name:'Y1-爆款 外开窗',tag:'外开',  tag2:'tag-blue',  desc:'110mm 窗纱一体 外平开',  glass:'xxx', hw:'xxx', wallthk:'xxx', heat:'xxx', color:'xxx', winP:999,  sashP:999, screenP:999,  minArea:1.2, minSashArea:1.0, type:'outward'},
+  {id:'Y1Max',   name:'Y1-Max 窄外开', tag:'窄框',  tag2:'tag-gray',  desc:'110mm 窄框窗纱一体',    glass:'xxx', hw:'xxx', wallthk:'xxx', heat:'xxx', color:'xxx', winP:999, sashP:999, screenP:999,  minArea:1.2, minSashArea:1.0, type:'outward'},
+  {id:'C1',      name:'C1 推拉窗',     tag:'推拉',  tag2:'tag-green', desc:'76mm 推拉双玻',         glass:'xxx', hw:'xxx', wallthk:'xxx', heat:'xxx', color:'xxx', winP:999, sashP:999,    screenP:999,minArea:1.0, minSashArea:2.0, type:'sliding'},
+  {id:'C3',      name:'C3 侧压窗',     tag:'侧压',  tag2:'tag-amber', desc:'100mm 侧压纱一体',      glass:'xxx', hw:'xxx', wallthk:'xxx', heat:'xxx', color:'xxx', winP:999, sashP:999, screenP:999,  minArea:1.5, minSashArea:1.0, type:'sidepush'},
+  {id:'C5',      name:'C5 六轨推拉',   tag:'全景',  tag2:'tag-red',   desc:'130mm 六轨全景推拉',    glass:'xxx', hw:'xxx', wallthk:'xxx', heat:'xxx', color:'xxx', winP:999, sashP:999,    screenP:999,minArea:1.0, minSashArea:2.0, type:'sliding'},
+  {id:'D70door', name:'D1-70 平开门',  tag:'平开门',tag2:'tag-red',   desc:'70mm 单/对开 KNG五金',  glass:'xxx', hw:'xxx', wallthk:'xxx', heat:'xxx', color:'xxx', winP:999, sashP:999, screenP:999,  minArea:2.0, minSashArea:0,   type:'door', sashPDouble:999},
+  {id:'D75door', name:'D1-75 平开门',  tag:'平开门',tag2:'tag-green', desc:'75mm 平开 KNG五金',     glass:'xxx', hw:'xxx', wallthk:'xxx', heat:'xxx', color:'xxx', winP:999, sashP:999, screenP:999,  minArea:2.0, minSashArea:0,   type:'door', sashPDouble:999},
+  {id:'D80door', name:'D1-80 平开门',  tag:'框扇齐平',tag2:'tag-amber',desc:'80mm 框扇齐平 KNG五金', glass:'xxx', hw:'xxx', wallthk:'xxx', heat:'xxx', color:'xxx', winP:999, sashP:999, screenP:999,  minArea:2.0, minSashArea:0,   type:'door', sashPDouble:999},
+  {id:'C2door',  name:'C2 提升推拉门', tag:'推拉门',tag2:'tag-blue',  desc:'120mm 提升推拉 皓涛五金',glass:'xxx', hw:'xxx', wallthk:'xxx', heat:'xxx', color:'xxx', winP:999, sashP:999, screenP:999,  minArea:3.5, minSashArea:0,   type:'slidingDoor'},
+];
+
+const UPGRADES = {
+  glass:[
+    {name:'遮阳升级 Low-E（单层）', price:999, unit:'㎡', note:'大幅提升隔热'},
+    {name:'玻璃夹胶升级（单层）', price:999, unit:'㎡', note:'提升隔音，破损不脱落'},
+    {name:'超白/绿玻/磨砂升级', price:999, unit:'㎡', note:'外观统一要求'},
+    {name:'冲氩气升级', price:999, unit:'㎡', note:'超出2.5㎡需填充'},
+    {name:'玻璃升级6mm（2~3㎡/扇）', price:999, unit:'㎡', note:''},
+    {name:'玻璃升级8mm（3~4㎡/扇）', price:999, unit:'㎡', note:''},
+    {name:'玻璃升级10mm（>4㎡/扇）', price:999, unit:'㎡', note:''},
+    {name:'玻璃升级12mm', price:999, unit:'㎡', note:''},
+    {name:'内置百叶-手动', price:999, unit:'㎡', note:'汉狮品牌'},
+    {name:'内置百叶-电动', price:999, unit:'㎡', note:'汉狮，遥控另加500元'},
+    {name:'5度阳光（双玻→双玻5度）', price:999, unit:'㎡', note:'4SG+双银Low-E'},
+    {name:'5度阳光（双玻→三玻5度）', price:999, unit:'㎡', note:''},
+    {name:'5度阳光（三玻→三玻5度）', price:999, unit:'㎡', note:''},
+    {name:'玻璃升级 4SG/TPSS', price:999, unit:'㎡', note:'单腔，增保温'},
+    {name:'玻璃护栏', price:999, unit:'米', note:'不足1米按1米，高≤1.2m'},
+    {name:'遮阳升级-加一层玻璃', price:999, unit:'㎡', note:'减少结露，提升保温隔音'},
+  ],
+  hardware:[
+    {name:'五金升级 KNG→诺托（普通）', price:999, unit:'扇', note:'进口五金差价'},
+    {name:'五金升级 KNG→诺托加重', price:999, unit:'扇', note:'加重版诺托'},
+    {name:'改外平开', price:999, unit:'项', note:'外开铰链+转向框'},
+    {name:'改外悬开', price:999, unit:'项', note:'外开铰链+转向框'},
+    {name:'五金升级180°开启', price:999, unit:'项', note:'常规90°升级180°'},
+    {name:'五金-加锁点（窗高>1.35m）', price:999, unit:'个', note:''},
+    {name:'电动开启升级', price:999, unit:'套', note:'手动升级电动'},
+    {name:'限位风撑（窗）', price:999, unit:'个', note:'内开KNG/外开奥森姆'},
+    {name:'限位风撑（门）', price:999, unit:'个', note:''},
+    {name:'合页增加（门）', price:999, unit:'个', note:''},
+    {name:'执手升级 HOPPE', price:999, unit:'项', note:'银/黑/白'},
+    {name:'执手升级 诺托ROTO', price:999, unit:'项', note:'银/黑/白'},
+    {name:'平开门五金升级 诺托ROTO', price:999, unit:'项', note:''},
+    {name:'非标颜色（单面）', price:999, unit:'㎡', note:'超出5种标准色'},
+  ],
+  joint:[
+    {name:'90°转角', price:999, unit:'米', note:''},
+    {name:'135°转角', price:999, unit:'米', note:''},
+    {name:'225°转角', price:999, unit:'米', note:''},
+    {name:'270°转角', price:999, unit:'米', note:''},
+    {name:'拼条（工字）双面', price:999, unit:'米', note:''},
+    {name:'折弯铝板', price:999, unit:'米', note:''},
+    {name:'转角/加强中挺', price:999, unit:'米', note:''},
+    {name:'附框', price:999, unit:'米', note:'料宽>52mm按转角'},
+    {name:'20拼管', price:999, unit:'米', note:''},
+    {name:'28拼管', price:999, unit:'米', note:''},
+    {name:'52拼管', price:999, unit:'米', note:''},
+    {name:'78拼管', price:999, unit:'米', note:''},
+    {name:'104拼管', price:999, unit:'米', note:''},
+    {name:'欧式美景条', price:999, unit:'㎡', note:'铝间隔条'},
+    {name:'中式美景条', price:999, unit:'㎡', note:'铝间隔条'},
+    {name:'异型窗加工费', price:999, unit:'个', note:'非矩形窗按最大面积'},
+    {name:'异型加工-框弧', price:999, unit:'个', note:''},
+    {name:'异型加工-立弧（玻璃）', price:999, unit:'㎡', note:'4SG不可做立弧'},
+    {name:'70微通风（≤1800mm）', price:999, unit:'㎡', note:'丝吉利娅五金，拼接'},
+    {name:'70微通风（>1800mm）', price:999, unit:'㎡', note:'丝吉利娅五金，拼接'},
+  ],
+  screen:[
+    {name:'MD平开纱窗', price:999, unit:'㎡', note:'0.18丝304不锈钢，不足1㎡按1㎡'},
+    {name:'MD五防纱窗', price:999, unit:'㎡', note:'304不锈钢0.2丝'},
+    {name:'MD滑盖锁纱窗', price:999, unit:'㎡', note:'304不锈钢0.2丝'},
+    {name:'MD隐形纱窗', price:999, unit:'㎡', note:'玻璃纤维网，面积≤1.8㎡'},
+    {name:'MD平开纱门', price:999, unit:'㎡', note:'不足2㎡按2㎡'},
+    {name:'MD推拉纱门', price:999, unit:'㎡', note:'不足2㎡按2㎡'},
+    {name:'MD折叠纱门', price:999, unit:'㎡', note:'日本进口PP网'},
+    {name:'MD隐形纱门', price:999, unit:'㎡', note:'玻璃纤维网，不足2㎡按2㎡'},
+  ],
+  custom:[]
+};
+
+// ====================== STATE ======================
+let selSeries = null;
+let upgTab = 'glass';
+let basicRows = [];
+let upgRows = [];
+let svcRows = [];
+let idCounter = 0;
+function newId(){ return ++idCounter; }
+
+// ====================== RENDER SERIES ======================
+function renderSeries(){
+  const g = document.getElementById('seriesGrid');
+  g.innerHTML = SERIES.map(s=>`
+    <div class="prod-card ${selSeries&&selSeries.id===s.id?'active':''}" onclick="selectSeries('${s.id}')">
+      <span class="pt ${s.tag2}">${s.tag}</span>
+      <div class="pn">${s.name}</div>
+      <div class="pd">${s.desc}</div>
+      <div class="pp">整窗 ¥${s.winP}/㎡ · 开启扇 ¥${s.sashP||'-'}/扇</div>
+    </div>
+  `).join('');
+}
+
+function selectSeries(id){
+  selSeries = SERIES.find(s=>s.id===id);
+  renderSeries();
+  renderSpec();
+  // Auto-add a basic row with this series
+  if(basicRows.length===0) addBasicRow();
+  else {
+    // Update last empty row's product name
+    const lastRow = basicRows[basicRows.length-1];
+    if(!lastRow.product || lastRow.product==='') lastRow.product = selSeries.name;
+    if(!lastRow.winPrice) lastRow.winPrice = selSeries.winP;
+    if(!lastRow.sashPrice) lastRow.sashPrice = selSeries.sashP||'';
+  }
+  renderBasicTable();
+}
+
+// ====================== SPEC PANEL ======================
+function renderSpec(){
+  const s = selSeries;
+  if(!s){ document.getElementById('specBody').innerHTML='<div style="text-align:center;padding:20px 0;color:var(--muted);font-size:12px">请先选择产品系列</div>'; return; }
+  document.getElementById('specBody').innerHTML=`
+    <table class="spec-table">
+      <tr><th>产品系列</th><td>${s.name}</td></tr>
+      <tr><th>玻璃配置</th><td>${s.glass}</td></tr>
+      <tr><th>铝材壁厚</th><td>6063-T5，壁厚${s.wallthk}</td></tr>
+      <tr><th>隔热条</th><td>${s.heat}</td></tr>
+      <tr><th>五金执手</th><td>${s.hw}</td></tr>
+      <tr><th>标准颜色</th><td style="font-size:11px">${s.color}</td></tr>
+      <tr><th>整窗单价</th><td style="color:var(--red);font-weight:700">¥${s.winP}/㎡（最小${s.minArea}㎡）</td></tr>
+      <tr><th>开启扇价</th><td style="color:var(--red);font-weight:700">${s.sashP?'¥'+s.sashP+'/扇':'-'}</td></tr>
+      ${s.screenP?`<tr><th>纱窗单价</th><td style="color:var(--red);font-weight:700">¥${s.screenP}/㎡</td></tr>`:''}
+      ${s.sashPDouble?`<tr><th>对开五金</th><td style="color:var(--red);font-weight:700">¥${s.sashPDouble}/组</td></tr>`:''}
+    </table>
+    <div class="warranty-note">整窗x年质保</div>
+    <div style="margin-top:8px;font-size:11px;color:var(--muted)">
+      计价规则：${s.type==='sliding'||s.type==='slidingDoor'?'推拉：总价=基础价×面积+纱窗面积×纱窗单价；单框不足'+s.minArea+'㎡按'+s.minArea+'㎡':'平开：总价=基础价×面积+开启扇数×开启扇单价；单框不足'+s.minArea+'㎡按'+s.minArea+'㎡'}
+    </div>
+  `;
+}
+
+// ====================== BASIC TABLE ======================
+function addBasicRow(){
+  basicRows.push({
+    id:newId(),
+    product: selSeries?selSeries.name:'',
+    area:'', winPrice: selSeries?selSeries.winP:'',
+    sashQty:'', sashPrice: selSeries?selSeries.sashP:'',
+    screenQty:'', screenPrice: selSeries?selSeries.screenP||'':'',
+    note:''
+  });
+  renderBasicTable();
+}
+
+function renderBasicTable(){
+  const tbody = document.getElementById('basicBody');
+  tbody.innerHTML = basicRows.map((r,i)=>{
+    const total = calcBasicRowTotal(r);
+    return `<tr>
+      <td>${i+1}</td>
+      <td><input class="left" value="${esc(r.product)}" placeholder="产品系列" oninput="updateBasicRow(${r.id},'product',this.value)"></td>
+      <td><input type="number" step="0.01" min="0" value="${r.area}" placeholder="0.00" oninput="updateBasicRow(${r.id},'area',this.value)"></td>
+      <td><input type="number" step="1" min="0" value="${r.winPrice}" placeholder="0" oninput="updateBasicRow(${r.id},'winPrice',this.value)"></td>
+      <td><input type="number" step="1" min="0" value="${r.sashQty}" placeholder="0" oninput="updateBasicRow(${r.id},'sashQty',this.value)"></td>
+      <td><input type="number" step="1" min="0" value="${r.sashPrice}" placeholder="0" oninput="updateBasicRow(${r.id},'sashPrice',this.value)"></td>
+      <td><input type="number" step="0.01" min="0" value="${r.screenQty}" placeholder="0" oninput="updateBasicRow(${r.id},'screenQty',this.value)"></td>
+      <td><input type="number" step="1" min="0" value="${r.screenPrice}" placeholder="0" oninput="updateBasicRow(${r.id},'screenPrice',this.value)"></td>
+      <td class="total-cell">${total>0?total.toFixed(2):''}</td>
+      <td><input class="left" value="${esc(r.note)}" placeholder="备注" oninput="updateBasicRow(${r.id},'note',this.value)"></td>
+      <td><button class="del-btn" onclick="delBasicRow(${r.id})">✕</button></td>
+    </tr>`;
+  }).join('');
+  recalcAll();
+}
+
+function calcBasicRowTotal(r){
+  const area = parseFloat(r.area)||0;
+  const wp = parseFloat(r.winPrice)||0;
+  const sq = parseFloat(r.sashQty)||0;
+  const sp = parseFloat(r.sashPrice)||0;
+  const scrq = parseFloat(r.screenQty)||0;
+  const scrp = parseFloat(r.screenPrice)||0;
+  if(!area) return 0;
+  return area*wp + sq*sp + scrq*scrp;
+}
+
+function updateBasicRow(id,field,val){
+  const r = basicRows.find(x=>x.id===id); if(!r) return;
+  r[field]=val;
+  renderBasicTable();
+}
+function delBasicRow(id){ basicRows=basicRows.filter(x=>x.id!==id); renderBasicTable(); }
+
+// ====================== UPGRADE TABLE ======================
+function switchUpgTab(tab,el){
+  upgTab=tab;
+  document.querySelectorAll('#addonContent .tab, .tab-bar .tab').forEach(t=>{ if(t.parentElement===el.parentElement) t.classList.remove('active'); });
+  el.classList.add('active');
+  renderUpgPicker();
+}
+
+function renderUpgPicker(){
+  const items = UPGRADES[upgTab]||[];
+  const container = document.getElementById('upgQuickPicker');
+  if(items.length===0){ container.innerHTML='<div style="font-size:12px;color:var(--muted)">自定义模式：点击下方"添加升级项"手动填写</div>'; return; }
+  container.innerHTML=`<div style="font-size:11px;color:var(--muted);margin-bottom:4px">快速添加：</div>
+    <div style="display:flex;flex-wrap:wrap;gap:5px">
+    ${items.map(a=>`<button style="padding:3px 9px;border:1px solid var(--border2);border-radius:4px;background:var(--white);font-size:11px;cursor:pointer;font-family:inherit;transition:all .1s" 
+      onmouseover="this.style.borderColor='var(--red)';this.style.color='var(--red)'" 
+      onmouseout="this.style.borderColor='';this.style.color=''"
+      onclick="addUpgPreset('${esc2(a.name)}',${a.price},'${a.unit}','${esc2(a.note)}')">${a.name} ¥${a.price}/${a.unit}</button>`).join('')}
+    </div>`;
+}
+
+function addUpgRow(name='',price='',qty='',note='',cat='升级项'){
+  upgRows.push({id:newId(), cat, name, price, qty, note});
+  renderUpgTable();
+}
+
+function addUpgPreset(name,price,unit,note){
+  upgRows.push({id:newId(), cat:'升级项', name:`${name}`, price, qty:'', note:`${note}（${unit}`+'）'});
+  renderUpgTable();
+}
+
+function renderUpgTable(){
+  const tbody = document.getElementById('upgBody');
+  tbody.innerHTML = upgRows.map((r,i)=>{
+    const sub = calcSubtotal(r.price, r.qty);
+    return `<tr>
+      <td>${i+1}</td>
+      <td><input class="left" value="${esc(r.cat)}" placeholder="分类" oninput="updateUpgRow(${r.id},'cat',this.value)" style="width:60px"></td>
+      <td><input class="left" value="${esc(r.name)}" placeholder="升级项目名称" oninput="updateUpgRow(${r.id},'name',this.value)"></td>
+      <td><input type="number" step="1" min="0" value="${r.price}" placeholder="0" oninput="updateUpgRow(${r.id},'price',this.value)"></td>
+      <td><input type="number" step="0.01" min="0" value="${r.qty}" placeholder="0" oninput="updateUpgRow(${r.id},'qty',this.value)"></td>
+      <td class="total-cell">${sub>0?sub.toFixed(2):''}</td>
+      <td><input class="left" value="${esc(r.note)}" placeholder="备注" oninput="updateUpgRow(${r.id},'note',this.value)"></td>
+      <td><button class="del-btn" onclick="delUpgRow(${r.id})">✕</button></td>
+    </tr>`;
+  }).join('');
+  recalcAll();
+}
+
+function calcSubtotal(p,q){ const pv=parseFloat(p)||0; const qv=parseFloat(q)||0; return pv*qv; }
+function updateUpgRow(id,field,val){ const r=upgRows.find(x=>x.id===id); if(!r) return; r[field]=val; renderUpgTable(); }
+function delUpgRow(id){ upgRows=upgRows.filter(x=>x.id!==id); renderUpgTable(); }
+
+// ====================== SERVICE TABLE ======================
+function addSvcRow(cat='服务项',name='',price='',qty='',note=''){
+  svcRows.push({id:newId(), cat, name, price, qty, note});
+  renderSvcTable();
+}
+function addSvcPreset(name,price){ addSvcRow('服务项',name,price,'',''); }
+
+function renderSvcTable(){
+  const tbody = document.getElementById('svcBody');
+  tbody.innerHTML = svcRows.map((r,i)=>{
+    const sub = calcSubtotal(r.price, r.qty);
+    return `<tr>
+      <td>${i+1}</td>
+      <td><input class="left" value="${esc(r.cat)}" placeholder="分类" oninput="updateSvcRow(${r.id},'cat',this.value)" style="width:60px"></td>
+      <td><input class="left" value="${esc(r.name)}" placeholder="服务项目名称" oninput="updateSvcRow(${r.id},'name',this.value)"></td>
+      <td><input type="number" step="1" min="0" value="${r.price}" placeholder="0" oninput="updateSvcRow(${r.id},'price',this.value)"></td>
+      <td><input type="number" step="0.01" min="0" value="${r.qty}" placeholder="0" oninput="updateSvcRow(${r.id},'qty',this.value)"></td>
+      <td class="total-cell">${sub>0?sub.toFixed(2):''}</td>
+      <td><input class="left" value="${esc(r.note)}" placeholder="备注" oninput="updateSvcRow(${r.id},'note',this.value)"></td>
+      <td><button class="del-btn" onclick="delSvcRow(${r.id})">✕</button></td>
+    </tr>`;
+  }).join('');
+  recalcAll();
+}
+function updateSvcRow(id,field,val){ const r=svcRows.find(x=>x.id===id); if(!r) return; r[field]=val; renderSvcTable(); }
+function delSvcRow(id){ svcRows=svcRows.filter(x=>x.id!==id); renderSvcTable(); }
+
+// ====================== RECALC ======================
+function recalcAll(){
+  const basic = basicRows.reduce((s,r)=>s+calcBasicRowTotal(r),0);
+  const upg = upgRows.reduce((s,r)=>s+calcSubtotal(r.price,r.qty),0);
+  const svc = svcRows.reduce((s,r)=>s+calcSubtotal(r.price,r.qty),0);
+  const discount = Math.min(1, Math.max(0, parseFloat(document.getElementById('discount').value)||1));
+  const discounted = (basic+upg)*discount;
+  const grand = discounted + svc;
+
+  document.getElementById('basicTotal').textContent = basic.toFixed(2);
+  document.getElementById('upgTotal').textContent = upg.toFixed(2);
+  document.getElementById('svcTotal').textContent = svc.toFixed(2);
+  document.getElementById('s_basic').textContent = '¥'+basic.toFixed(2);
+  document.getElementById('s_upg').textContent = '¥'+upg.toFixed(2);
+  document.getElementById('s_svc').textContent = '¥'+svc.toFixed(2);
+  document.getElementById('s_discounted').textContent = discount<1?'¥'+discounted.toFixed(2)+' (折后)':'¥'+discounted.toFixed(2);
+  document.getElementById('s_grand').textContent = '¥'+grand.toFixed(2);
+
+  // Small order check
+  const totalArea = basicRows.reduce((s,r)=>s+(parseFloat(r.area)||0),0);
+  const note = document.getElementById('smallOrderNote');
+  if((totalArea>0 && totalArea<8) || (grand>0 && grand<10000)){
+    note.style.display='block';
+  } else {
+    note.style.display='none';
+  }
+}
+
+// ====================== UTILS ======================
+function esc(s){ return (s||'').toString().replace(/"/g,'&quot;'); }
+function esc2(s){ return (s||'').replace(/'/g,"\\'"); }
+
+function printQuote(){
+  const n=document.getElementById('f_name').value||'（未填）';
+  const a=document.getElementById('f_addr').value||'（未填）';
+  const d=document.getElementById('f_designer').value||'（未填）';
+  const v=document.getElementById('f_valid').value||'（未填）';
+  document.title=`京品门窗报价单-${n}-${new Date().toLocaleDateString('zh-CN')}`;
+  window.print();
+}
+
+function resetAll(){
+  if(!confirm('确认重置所有数据？')) return;
+  selSeries=null; basicRows=[]; upgRows=[]; svcRows=[]; idCounter=0;
+  ['f_name','f_addr','f_designer','f_valid'].forEach(id=>{ document.getElementById(id).value=''; });
+  document.getElementById('discount').value=1;
+  renderSeries(); renderSpec(); renderBasicTable(); renderUpgTable(); renderSvcTable(); recalcAll();
+}
+
+// ====================== INIT ======================
+renderSeries();
+renderSpec();
+renderBasicTable();
+renderUpgTable();
+renderSvcTable();
+renderUpgPicker();
+recalcAll();
+</script>
+</body>
+</html>
