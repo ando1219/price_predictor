@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>京品门窗 · 在线报价</title>
+<title>门窗在线报价</title>
 <style>
 *{margin:0;padding:0;box-sizing:border-box}
 :root{
@@ -145,7 +145,7 @@ body{font-family:'PingFang SC','Microsoft YaHei',sans-serif;background:var(--bg)
 
 <div class="page-header">
   <div>
-    <h1>京品门窗 · 在线报价工具</h1>
+    <h1>门窗在线报价工具</h1>
     <p>填写项目信息 → 选系列 → 配置明细 → 生成报价单</p>
   </div>
   <div class="header-actions">
@@ -665,7 +665,7 @@ function printQuote(){
   const a=document.getElementById('f_addr').value||'（未填）';
   const d=document.getElementById('f_designer').value||'（未填）';
   const v=document.getElementById('f_valid').value||'（未填）';
-  document.title=`京品门窗报价单-${n}-${new Date().toLocaleDateString('zh-CN')}`;
+  document.title=`门窗报价单-${n}-${new Date().toLocaleDateString('zh-CN')}`;
   window.print();
 }
 
